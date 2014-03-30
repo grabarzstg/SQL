@@ -1,0 +1,25 @@
+(zadanie dla grupy D)
+
+Napisaæ program w C, który w bazie danych PostgreSQL utworzy tabelê sk³adaj¹c¹ siê z co najmniej 5 kolumn (w tym ³añcuch znaków, data, liczba) o dowolnej tematyce.
+
+Na ¿yczenie u¿ytkownika program powinien:
+
+1.utworzyæ tabelê [1pkt]
+2.usuwaæ tabelê[1pkt]
+3.dodawaæ i modyfikowaæ rekordy w tabeli [1pkt]
+4.usuwaæ rekord z tabeli [1pkt]
+5.dodawaæ dodatkow¹ kolumnê do ju¿ istniej¹cej tabeli [1pkt]
+6.wyœwietlaæ zawartoœæ tabeli na ekranie [1pkt]
+7.wczytywaæ dane do tabeli z pliku, jeœli podczas wywo³ywania programu podaliœmy nazwê pliku jako parametr [2 pkt]
+8. tworzyæ wyzwalacz, który sprawdza czy wartoœæ liczbowa mieœci siê w odpowiednim przedziale [3pkt]
+9. usuwaæ wyzwalacz [1pkt]
+10. wyœwietlaæ zawartoœæ tabeli jako tabelê HTML (plik) [2pkt]
+11. obs³uga b³êdów [1pkt]
+
+Jako rozwi¹zanie nale¿y przes³aæ kod programu, plik z przyk³adowymi danymi, jeden przyk³adowy wynik.
+
+Uwaga,
+
+u¿ytkownik powinien mieæ mo¿liwoœæ uzupe³niania tabeli danymi podawanymi z klawiatury. Analogicznie dla modyfikowania danych i usuwania rekordów.
+
+Pamiêtaj aby zmieniæ has³o na sigmie!
