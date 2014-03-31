@@ -22,7 +22,7 @@ void doSQL(PGconn *conn, char *command)
 
   printf("%s\n", command);
 
-  result = PQexec(conn, command);
+  result = PQexec(conn, command); 
   printf("STATUS        : %s\n", PQresStatus(PQresultStatus(result)));
   printf("#rows affected: %s\n", PQcmdTuples(result));
   printf("result message: %s\n", PQresultErrorMessage(result));
@@ -194,6 +194,45 @@ void select_all(PGconn *conn, char *name)
     printf("%s\n", PQerrorMessage(conn));
 }
 
+/*    TRIGGER    */
+void trigger_add(PGconn *conn){
+  if(PQstatus(conn) == CONNECTION_OK) {
+    printfc("DONE: \n", GREEN);
+    doSQL(conn, "CREATE OR REPLACE FUNCTION dodatnie() RETURNS TRIGGER AS $$ BEGIN IF NEW.id < 1 THEN RAISE EXCEPTION '% id must be greater than zero', NEW.id; END IF; RETURN NEW; END; $$ LANGUAGE 'plpgsql';");
+    doSQL(conn, "CREATE TRIGGER number_insert BEFORE INSERT ON number FOR EACH ROW EXECUTE PROCEDURE dodatnie();");
+
+  }
+  else
+  printfc("Connection failed: ",RED);
+    printf("%s\n", PQerrorMessage(conn));
+}
+
+/* HTML  */
+void html(PGconn *conn, PGresult *result)
+{
+    if(PQresultStatus(result)==PGRES_TUPLES_OK) 
+    { 
+      PQprintOpt pqp;
+      pqp.header = 1;
+      pqp.align = 1;
+      pqp.html3 = 1;
+      pqp.expanded = 0;
+      pqp.pager = 0;
+      pqp.fieldSep = "";
+      pqp.tableOpt = "align=center";
+      pqp.caption = "Bingham Customer List";
+      pqp.fieldName = NULL;
+	  FILE *fp;
+	  if ((fp=fopen("index.html", "w"))==NULL) {
+     printf ("Nie mogę otworzyć pliku index.html do zapisu!\n");
+     exit(1);
+     }
+	  fprintf (fp, "%s", "<HTML> <HEAD> </HEAD> <BODY>\n"); /* zapisz nasz łańcuch w pliku */
+      PQprint(fp, result, &pqp);
+	  fprintf (fp, "%s", "</BODY> </HTML>\n");
+	  fclose (fp);
+    }
+}
 
 // MAIN
 int main()
@@ -202,30 +241,22 @@ system("clear");
   PGresult *result;
   PGconn   *conn;
 conn = PQconnectdb(passwords);
+result = PQexec(conn, "SELECT * FROM number");
 drop(conn, "number");
 create(conn, "number");
+trigger_add(conn);
 //alter_add(conn, "number", "skype ", "VARCHAR");
 //alter_drop(conn, "number", "skype ");
 insert(conn,"number", "1", "DAKA", "Rafal", "Daca");
 //update(conn,"number", "DACA", "1");
 //select_all(conn,"number");
 //delete_id(conn, "number", "1");
+insert(conn,"number", "0", "DAKA", "Rafal", "Daca");
+html(conn, result);
+    
 
 
-  if(PQstatus(conn) == CONNECTION_OK) {
-    printf("connection made\n");
-
- //   doSQL(conn, "DROP TABLE wpis");
-    doSQL(conn, "CREATE OR REPLACE FUNCTION dodatnie() RETURNS TRIGGER AS $$ BEGIN IF NEW.id < 1 THEN RAISE EXCEPTION '% id must be greater than zero', NEW.id; END IF; RETURN NEW; END; $$ LANGUAGE 'plpgsql';");
-    doSQL(conn, "CREATE TRIGGER number_insert BEFORE INSERT ON number FOR EACH ROW EXECUTE PROCEDURE dodatnie();");
-
-  }
-  else
-    printf("connection failed: %s\n", PQerrorMessage(conn));
-
-	insert(conn,"number", "0", "DAKA", "Rafal", "Daca");
-
-select_all(conn,"number");
+	select_all(conn,"number");
   PQfinish(conn);
   return EXIT_SUCCESS;
 }
