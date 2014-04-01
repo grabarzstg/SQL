@@ -5,9 +5,11 @@
 */
 
 
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
 #include <libpq-fe.h> 
 #include <string.h>
+
 #include "colour.h"  
 #include "passwords.h"
 
@@ -234,8 +236,22 @@ void html(PGconn *conn, PGresult *result)
     }
 }
 
+
+/*  EXECUTE */
+void execute(PGconn *conn, char *komenda)
+{
+  if(PQstatus(conn) == CONNECTION_OK) {
+
+    printfc("DONE: \n", GREEN);
+    doSQL(conn, komenda);
+  }
+  else
+  printfc("Connection failed: ",RED);
+    printf("%s\n", PQerrorMessage(conn));
+}
+
 // MAIN
-int main()
+int main (int argc, char *argv[])
 {
 system("clear");
   PGresult *result;
@@ -254,9 +270,46 @@ insert(conn,"number", "1", "DAKA", "Rafal", "Daca");
 insert(conn,"number", "0", "DAKA", "Rafal", "Daca");
 html(conn, result);
     
+	
 
 
-	select_all(conn,"number");
+	
+FILE*   f;
+ f = fopen(argv[1], "r");
+ char *komenda;
+ char *command = "";
+ int i;
+
+  if (argc > 1)
+    {
+ 
+ if (f == NULL)
+    {
+	printfc("ERROR 404 \n", RED);
+
+	// podczas uruchamiania na SIGMIE, w tym miejscu wystepuje CORE DUMPED!
+	}
+	else
+	{
+	printfc("EXECUTING FROM FILE \n", RED);
+	for (i=0; feof(f)==0; ++i) 
+		{
+		sleep(1);
+		fscanf(f, "%[^\n] \n", komenda);
+		execute(conn, komenda);
+		
+		}
+	}
+ fclose(f);
+ 	 
+}
+	
+	
+	
+	
+
+
+	//select_all(conn,"number");
   PQfinish(conn);
   return EXIT_SUCCESS;
 }
