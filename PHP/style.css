@@ -1,0 +1,17 @@
+body {
+background: #6E7E94;
+	padding:5px;
+	display:block;
+	clear: both;
+}
+
+div#loguj{
+	padding:20px;
+	float:right;
+	background: #A700AE;
+}
+
+div#main{
+	clear: both;
+	padding:20px;
+}

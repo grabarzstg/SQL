@@ -1,0 +1,44 @@
+Zadanie część 1 (wykonanie menu)
+
+Dana jest tabela o nazwie kategoria, która zawiera nazwy kategorii i podkategorii:
+CREATE TABLE kategoria(
+  id_kategoria INTEGER PRIMARY KEY,
+  nazwa VARCHAR(50) NOT NULL,
+  id_nadkategoria INTEGER references kategoria(id_kategoria)
+);
+ 
+Przykładowe rekordy mogą mieć postać:
+INSERT INTO kategoria VALUES(1,'ssaki',NULL);
+INSERT INTO kategoria VALUES(2,'Prototheria',1);
+INSERT INTO kategoria VALUES(3,'Monotremata',2);
+INSERT INTO kategoria VALUES(4,'Theria',1);
+
+...  
+
+Wartość NULL w kolumnie id_nadkategoria oznacza, że kategoria jest kategorią główną np: ssaki, natomiast w kategorii ssaki są dwie podkategorie:theria i  prototheria, w tej ostatniej zaś znajduje się kolejna  podkategoria itd.
+
+Napisać skrypt PHP wyświetlający zawartość tabeli kategoria w postaci menu:
+1. Najpierw powinny być wyświetlone tylko kategorie główne,
+2. Potem użytkownik powinien mieć możliwość rozwinięcia dowolnej kategorii głównej poprzez wyświetlenie jej wszystkich podkategorii (wszystkie kategorie główne powinny być nadal widoczne), potem podkategorie wybranej podkategorii itd.
+3. Dodatkowo powinna istnieć możliwość z poziomu przeglądarki dodania nowej kategorii lub podkategorii, modyfikowania istniejącej, usunięcia wybranej kategorii, przeniesienia wybranej podkategorii w inne miejsce.
+4. Nie jest znany sposób wyświetlania menu: poziomy czy pionowy.
+5. System zarządzania bazą danych jest dowolny(MySQL, PostgreSQL, MSSQL, Oracle).
+6. Stwórz klasę PHP zawierającą rozwiązanie.
+7. Kod wynikowy powinien być napisany w standardach HTML5 i CSS3.
+8. (Używanie frameworka PHP nie jest zabronione.)
+
+Zadanie część 2 (określenie dodatkowej funkcjonalności)
+
+Po wybraniu pozycji z menu powinna się pojawić (niepusta, pobierana z bazy danych) zawartość strony (można indywidualnie zdecydować co to będzie).
+
+Osoby niezalogowane powinny mieć możliwość wyświetlania  zawartości stron.
+Natomiast osoby zalogowane powinny mieć dodatkowo możliwość dodawania, edycji i usuwania menu oraz  zawartości strony .
+
+Uwaga
+
+System zarządzania bazą danych użyty do rozwiązania części 2 powinien być inny niż użyty w części 1.
+
+Przykładowe loginy to:
+
+ewa hasło: ewa123
+jan hasło: jan123
